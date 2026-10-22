@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Subscription cost & usage review — prototype</title>
+<style>
+:root{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:#17232d;background:#f3f6f7;line-height:1.5}*{box-sizing:border-box}body{margin:0}header{background:#183c43;color:white;padding:1.4rem max(1rem,calc((100% - 1080px)/2))}header h1{font-size:clamp(1.55rem,4vw,2.15rem);line-height:1.2;margin:.5rem 0}header p{max-width:740px;margin:.4rem 0;color:#e2eeee}.badge{display:inline-block;border:1px solid #b8d4d3;border-radius:999px;padding:.25rem .65rem;font-size:.8rem;font-weight:700}.wrap{max-width:1080px;margin:1.2rem auto;padding:0 1rem}.notice{background:#fff5d8;border-left:4px solid #c5891c;padding:.9rem 1rem;margin-bottom:1rem}.grid{display:grid;grid-template-columns:minmax(280px,.85fr) minmax(0,1.5fr);gap:1rem}.panel{background:white;border:1px solid #d9e1e4;border-radius:12px;padding:1rem;box-shadow:0 2px 10px #1231}h2{font-size:1.25rem;margin:.1rem 0 .8rem}label{display:block;font-weight:650;margin:.72rem 0 .25rem}input,select,button{font:inherit}input,select{width:100%;padding:.58rem .65rem;border:1px solid #9baeb4;border-radius:6px;background:white;color:#17232d}input:focus,select:focus,button:focus-visible{outline:3px solid #e2a536;outline-offset:2px}.row{display:grid;grid-template-columns:1fr 1fr;gap:.65rem}.actions{display:flex;flex-wrap:wrap;gap:.55rem;margin-top:1rem}button{border:0;border-radius:6px;background:#17646a;color:white;padding:.58rem .85rem;font-weight:700;cursor:pointer}button:hover{background:#104e53}button.secondary{background:#e7eff0;color:#193e43;border:1px solid #a8bec0}button.danger{background:#9a3834}button.small{font-size:.88rem;padding:.38rem .6rem}.summary{display:grid;grid-template-columns:repeat(3,1fr);gap:.65rem;margin-bottom:1rem}.metric{background:#edf5f4;padding:.75rem;border-radius:8px}.metric strong{display:block;font-size:1.28rem}.metric span{font-size:.84rem;color:#455c61}.table-scroll{overflow-x:auto}table{width:100%;border-collapse:collapse;min-width:680px}th,td{text-align:left;padding:.65rem .5rem;border-bottom:1px solid #e1e7e8;vertical-align:top}th{font-size:.83rem;color:#43575d}td{font-size:.94rem}.flag{color:#873e14;font-weight:700}.muted{color:#53676c;font-size:.9rem}.empty{padding:1.5rem;text-align:center;color:#51666b;background:#f8fafb;border-radius:8px}.review-list{padding-left:1.25rem}.review-list li{margin:.35rem 0}.review-list .cost{font-weight:700}footer{max-width:1080px;margin:1rem auto 2rem;padding:0 1rem;color:#46595e;font-size:.9rem}footer details{background:white;border:1px solid #d9e1e4;border-radius:9px;padding:.8rem 1rem}footer li{margin:.35rem 0}.sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}#status{min-height:1.4em;color:#854228;font-weight:600;margin:.45rem 0}@media(max-width:760px){.grid{grid-template-columns:1fr}.summary{grid-template-columns:1fr}.metric{display:flex;justify-content:space-between;align-items:center}.metric strong{font-size:1.1rem}.row{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<header><span class="badge">Unvalidated prototype · founder-informed</span><h1>Subscription cost &amp; usage review</h1><p>A manual, browser-only audit for reviewing software subscriptions. Normalize recurring costs, spot unused tools and overlapping categories, then download a review report.</p></header>
+<main class="wrap">
+<div class="notice"><strong>Privacy:</strong> Input stays in this browser tab and is not saved. Enter subscription metadata only—do not include client identities, addresses, financial records, credentials or other sensitive information.</div>
+<div class="grid">
+<section class="panel" aria-labelledby="form-heading">
+<h2 id="form-heading">Add a subscription</h2>
+<form id="tool-form" novalidate>
+<input id="edit-id" type="hidden">
+<label for="tool-name">Tool name</label><input id="tool-name" required maxlength="80" autocomplete="off" placeholder="e.g., Scheduling app">
+<label for="category">Category</label><input id="category" required maxlength="60" autocomplete="off" placeholder="e.g., Scheduling">
+<div class="row"><div><label for="price">Price per billing period</label><input id="price" type="number" min="0" step="0.01" required inputmode="decimal" placeholder="0.00"></div><div><label for="billing">Billing frequency</label><select id="billing"><option value="monthly">Monthly</option><option value="annual">Annual</option></select></div></div>
+<label for="usage">Utilization</label><select id="usage"><option value="used">Used</option><option value="partly">Partly used</option><option value="unused">Unused</option></select>
+<label for="renewal">Renewal date <span class="muted">(optional)</span></label><input id="renewal" type="date">
+<div id="status" role="status" aria-live="polite"></div>
+<div class="actions"><button id="save-button" type="submit">Add subscription</button><button id="cancel-edit" class="secondary" type="button" hidden>Cancel edit</button></div>
+</form>
+<div class="actions"><button id="example" class="secondary" type="button">Load fictional example</button><button id="reset" class="secondary" type="button">Reset audit</button></div>
+<p class="muted">The example is synthetic and only loads when you choose this button. Starting list is empty.</p>
+</section>
+<section class="panel" aria-labelledby="overview-heading">
+<h2 id="overview-heading">Your review</h2>
+<div class="summary" aria-live="polite"><div class="metric"><span>Estimated monthly total</span><strong id="monthly-total">$0.00</strong></div><div class="metric"><span>Estimated annual total</span><strong id="annual-total">$0.00</strong></div><div class="metric"><span>Unused monthly cost<br><small>not guaranteed savings</small></span><strong id="unused-total">$0.00</strong></div></div>
+<p class="muted">Annualized estimates: annual bills are divided by 12; monthly bills are multiplied by 12. Actual charges, taxes and billing dates may differ.</p>
+<div id="list-area"></div>
+<h2 style="margin-top:1.2rem">Manual review candidates</h2><div id="review-area"></div>
+<div class="actions"><button id="download-csv" type="button">Download CSV report</button><button id="download-text" class="secondary" type="button">Download text report</button></div>
+<p class="muted">Exports contain only this audit's entered subscription metadata and estimates.</p>
+</section>
+</div>
+</main>
+<footer><details><summary><strong>Scope, limitations &amp; important context</strong></summary><ul><li>This is a founder-informed, unvalidated prototype. There is no independent expert validation, demonstrated demand, revenue or demonstrated savings.</li><li>It does not replace subscriptions, combine customer data, connect to services, cancel anything, purchase anything or take action automatically. A person must review candidates.</li><li>Unused cost is an estimate of current monthly-equivalent spend, not actual or recoverable savings. Multiple tools in a category are a prompt to review, not proof of redundancy.</li><li>No integrations, cancellations, CRM, lead generation, customer records, payments, sales promises or validated pricing. The founder's $500/month estimate is opinion, not a price.</li><li>Only subscription metadata belongs here. Data is held in current-tab memory, is not saved or sent anywhere, and is lost when the tab is closed or refreshed. No external requests are made.</li><li>This narrow audit does not test an all-in-one service or a half-price hypothesis. No explicit privacy constraints or disconfirming evidence were supplied.</li></ul></details></footer>
+<script>
+'use strict';
+const records=[];let nextId=1;
+const $=id=>document.getElementById(id);
+const escCsv=value=>'"'+String(value).replace(/"/g,'""').replace(/^[=+@\-]/,'\'$&')+'"';
+const money=n=>new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'}).format(n);
+const monthly=r=>r.billing==='annual'?r.price/12:r.price;
+function announce(msg){$('status').textContent=msg;}
+function resetForm(){ $('tool-form').reset();$('edit-id').value='';$('save-button').textContent='Add subscription';$('cancel-edit').hidden=true; }
+function render(){
+ const total=records.reduce((s,r)=>s+monthly(r),0),unused=records.filter(r=>r.usage==='unused').reduce((s,r)=>s+monthly(r),0);
+ $('monthly-total').textContent=money(total);$('annual-total').textContent=money(total*12);$('unused-total').textContent=money(unused);
+ const area=$('list-area');area.replaceChildren();
+ if(!records.length){const empty=document.createElement('div');empty.className='empty';empty.textContent='No subscriptions yet. Add non-sensitive metadata, or load the clearly fictional example.';area.append(empty);}
+ else {const scroll=document.createElement('div');scroll.className='table-scroll';const table=document.createElement('table'),thead=document.createElement('thead'),tbody=document.createElement('tbody');
+ const hr=document.createElement('tr');['Tool','Category','Billing price','Monthly equivalent','Usage','Renewal','Actions'].forEach(x=>{const th=document.createElement('th');th.scope='col';th.textContent=x;hr.append(th)});thead.append(hr);
+ records.forEach(r=>{const tr=document.createElement('tr');[r.name,r.category,money(r.price)+' / '+(r.billing==='annual'?'year':'month'),money(monthly(r)),r.usage==='partly'?'Partly used':r.usage.charAt(0).toUpperCase()+r.usage.slice(1),r.renewal||'—'].forEach((v,i)=>{const td=document.createElement('td');td.textContent=v;if(i===4&&r.usage==='unused')td.className='flag';tr.append(td)});
+ const td=document.createElement('td');const edit=document.createElement('button');edit.type='button';edit.className='small secondary';edit.textContent='Edit';edit.setAttribute('aria-label','Edit '+r.name);edit.addEventListener('click',()=>startEdit(r.id));const del=document.createElement('button');del.type='button';del.className='small danger';del.textContent='Remove';del.setAttribute('aria-label','Remove '+r.name);del.addEventListener('click',()=>{const i=records.findIndex(x=>x.id===r.id);if(i>=0)records.splice(i,1);render();announce('Subscription removed.');});td.append(edit,document.createTextNode(' '),del);tr.append(td);tbody.append(tr)});
+ table.append(thead,tbody);scroll.append(table);area.append(scroll);}
+ const byCategory=new Map();records.forEach(r=>{const key=r.category.trim().toLocaleLowerCase();if(!byCategory.has(key))byCategory.set(key,[]);byCategory.get(key).push(r)});
+ const candidates=[];records.filter(r=>r.usage==='unused').forEach(r=>candidates.push({label:r.name+' is marked unused',cost:money(monthly(r))+' monthly equivalent to review'}));
+ byCategory.forEach(list=>{if(list.length>1)candidates.push({label:list.map(r=>r.name).join(', ')+' share category “'+list[0].category+'”',cost:'Check for overlap manually'});});
+ const review=$('review-area');review.replaceChildren();if(!candidates.length){const p=document.createElement('p');p.className='muted';p.textContent='No review candidates yet. Unused tools and categories with multiple tools will be listed here.';review.append(p);}else{const ul=document.createElement('ul');ul.className='review-list';candidates.forEach(c=>{const li=document.createElement('li'),b=document.createElement('span'),span=document.createElement('span');b.textContent=c.label+' — ';span.className='cost';span.textContent=c.cost;li.append(b,span);ul.append(li)});review.append(ul)}
+}
+function startEdit(id){const r=records.find(x=>x.id===id);if(!r)return;$('edit-id').value=String(id);$('tool-name').value=r.name;$('category').value=r.category;$('price').value=String(r.price);$('billing').value=r.billing;$('usage').value=r.usage;$('renewal').value=r.renewal;$('save-button').textContent='Save changes';$('cancel-edit').hidden=false;$('tool-name').focus();announce('Editing '+r.name+'.');}
+$('tool-form').addEventListener('submit',e=>{e.preventDefault();announce('');const name=$('tool-name').value.trim(),category=$('category').value.trim(),raw=$('price').value,price=Number(raw),billing=$('billing').value,usage=$('usage').value,renewal=$('renewal').value;
+ if(!name||!category){announce('Enter a tool name and category.');return}if(raw===''||!Number.isFinite(price)||price<0){announce('Enter a valid non-negative price.');$('price').focus();return}if(!['monthly','annual'].includes(billing)||!['used','partly','unused'].includes(usage)){announce('Choose valid billing and utilization options.');return}if(renewal&&!/^\d{4}-\d{2}-\d{2}$/.test(renewal)){announce('Enter a valid renewal date or leave it blank.');return}
+ const id=$('edit-id').value;if(id){const record=records.find(x=>x.id===Number(id));if(record)Object.assign(record,{name,category,price,billing,usage,renewal});announce('Subscription updated.');}else{records.push({id:nextId++,name,category,price,billing,usage,renewal});announce('Subscription added.');}resetForm();render();
+});
+$('cancel-edit').addEventListener('click',()=>{resetForm();announce('Edit cancelled.');});
+$('example').addEventListener('click',()=>{records.splice(0,records.length,{id:nextId++,name:'HomeTour Scheduler (fictional)',category:'Scheduling',price:24,billing:'monthly',usage:'used',renewal:''},{id:nextId++,name:'Showing Planner (fictional)',category:'Scheduling',price:120,billing:'annual',usage:'partly',renewal:''},{id:nextId++,name:'Lead Notes Lite (fictional)',category:'Lead organization',price:18,billing:'monthly',usage:'unused',renewal:''});resetForm();render();announce('Fictional example loaded.');});
+$('reset').addEventListener('click',()=>{records.length=0;resetForm();render();announce('Audit reset; no data remains in this tab.');});
+function download(name,type,content){const blob=new Blob([content],{type});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000);}
+$('download-csv').addEventListener('click',()=>{const rows=[['Tool','Category','Billing price','Billing frequency','Monthly equivalent estimate','Annual equivalent estimate','Utilization','Renewal date','Review candidate']];records.forEach(r=>{const flags=[];if(r.usage==='unused')flags.push('Unused; review manually, not guaranteed savings');if(records.filter(x=>x.category.trim().toLocaleLowerCase()===r.category.trim().toLocaleLowerCase()).length>1)flags.push('Multiple tools in category; review overlap manually');rows.push([r.name,r.category,r.price,r.billing,monthly(r).toFixed(2),(monthly(r)*12).toFixed(2),r.usage,r.renewal,flags.join('; ')||'No automatic flag'])});const csv=rows.map(row=>row.map(escCsv).join(',')).join('\r\n');download('subscription-review.csv','text/csv;charset=utf-8',csv);announce('CSV report downloaded. Spreadsheet formula-like inputs are neutralized.');});
+$('download-text').addEventListener('click',()=>{const lines=['Subscription cost & usage review','Unvalidated prototype, founder-informed','Estimates only; manual review required. No savings are guaranteed.','',`Estimated monthly total: ${money(records.reduce((s,r)=>s+monthly(r),0))}`,`Estimated annual total: ${money(records.reduce((s,r)=>s+monthly(r)*12,0))}`,''];if(!records.length)lines.push('No subscriptions entered.');records.forEach(r=>{const multi=records.filter(x=>x.category.trim().toLocaleLowerCase()===r.category.trim().toLocaleLowerCase()).length>1;lines.push(`${r.name} | Category: ${r.category} | Billing: ${money(r.price)} / ${r.billing==='annual'?'year':'month'} | Monthly estimate: ${money(monthly(r))} | Usage: ${r.usage} | Renewal: ${r.renewal||'not provided'} | Review: ${[r.usage==='unused'?'unused tool; review manually':null,multi?'multiple tools in category; review overlap manually':null].filter(Boolean).join('; ')||'no automatic flag'}`)});lines.push('','Not connected to services; nothing cancelled or purchased. Costs are not savings.');download('subscription-review.txt','text/plain;charset=utf-8',lines.join('\n'));announce('Text report downloaded.');});
+render();
+</script>
+</body>
+</html>
