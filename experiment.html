@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vehicle Service Visit Prep Card</title>
+<style>
+:root{color-scheme:light;--ink:#17212b;--muted:#53616d;--line:#cbd5df;--paper:#fff;--wash:#f2f6f8;--accent:#145b73;--focus:#f2a900}*{box-sizing:border-box}body{margin:0;background:var(--wash);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}.wrap{max-width:900px;margin:0 auto;padding:28px 20px 48px}header{border-bottom:2px solid var(--line);padding-bottom:18px;margin-bottom:20px}h1{font-size:clamp(1.7rem,4vw,2.35rem);line-height:1.15;margin:0 0 8px}h2{font-size:1.18rem;margin:0 0 12px}p{margin:8px 0}.lede{color:var(--muted);max-width:70ch}.notice{background:#fff8e7;border-left:4px solid #b67b00;padding:12px 14px;margin:16px 0}.notice strong{display:block}.toolbar{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0}.toolbar button{border:0;border-radius:5px;padding:10px 16px;font:inherit;font-weight:650;cursor:pointer}.primary{background:var(--accent);color:white}.secondary{background:#e2eaf0;color:var(--ink)}button:hover{filter:brightness(.95)}button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid var(--focus);outline-offset:2px}fieldset{border:1px solid var(--line);border-radius:8px;background:var(--paper);padding:18px;margin:16px 0}legend{font-weight:700;padding:0 6px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}label{display:block;font-weight:600;margin:0 0 5px}.hint{font-size:.9rem;color:var(--muted);font-weight:400}input,textarea{display:block;width:100%;border:1px solid #9eacb8;border-radius:4px;padding:9px 10px;background:#fff;color:var(--ink);font:inherit}textarea{min-height:92px;resize:vertical}.full{grid-column:1/-1}.checklist{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.check{display:flex;gap:9px;align-items:flex-start;font-weight:400}.check input{width:1.1rem;height:1.1rem;flex:none;margin-top:3px}.actions-note{color:var(--muted);font-size:.92rem;margin-top:12px}.example{border:1px dashed #8796a1;border-radius:6px;padding:14px;margin-top:18px;background:#fff}.example summary{cursor:pointer;font-weight:650}.example pre{white-space:pre-wrap;overflow-wrap:anywhere;font:inherit;color:var(--muted)}footer{border-top:1px solid var(--line);padding-top:14px;color:var(--muted);font-size:.9rem;margin-top:24px}.status{min-height:1.5em;color:#145b3c;font-weight:600}@media(max-width:620px){.grid,.checklist{grid-template-columns:1fr}.wrap{padding:20px 14px 36px}}@media print{body{background:white;font-size:11pt}.wrap{max-width:none;padding:0}header{margin-bottom:10px}.toolbar,.no-print,.status{display:none!important}fieldset{break-inside:avoid;border:1px solid #777;margin:10px 0;padding:12px}input,textarea{border:0;border-bottom:1px solid #aaa;border-radius:0;padding:3px 0;background:transparent;appearance:none}textarea{min-height:55px}input[type=checkbox]{appearance:auto;width:13px;height:13px}.notice{background:white;border:1px solid #777}.example{display:none}footer{font-size:9pt}}
+</style>
+</head>
+<body>
+<main class="wrap">
+<header>
+<h1>Vehicle Service Visit Prep Card</h1>
+<p class="lede">Collect your own notes before contacting a technician or attending a service appointment. This worksheet organizes observations and questions; it does not interpret them.</p>
+<div class="notice"><strong>Practical limits</strong>This tool does not diagnose vehicle problems, recommend repairs, or replace a technician's assessment. No service, follow-up, or individualized advice is included. If you think the vehicle is unsafe to operate, do not rely on this worksheet to decide what to do.</div>
+<p class="hint">Privacy: avoid entering sensitive information such as your full address, account details, or personal identifiers. Your entries stay in this tab and are not saved by this page. Closing or reloading the tab discards them.</p>
+</header>
+<div class="toolbar" aria-label="Worksheet actions">
+<button class="primary" type="button" id="exportBtn">Download plain-text notes</button>
+<button class="secondary" type="button" id="printBtn">Print worksheet</button>
+<button class="secondary" type="button" id="resetBtn">Clear worksheet</button>
+</div>
+<p id="status" class="status" role="status" aria-live="polite"></p>
+<form id="worksheet" autocomplete="off">
+<fieldset><legend>Vehicle details</legend><div class="grid">
+<div><label for="makeModel">Make and model <span class="hint">(optional)</span></label><input id="makeModel" name="Make and model" type="text" maxlength="120"></div>
+<div><label for="year">Year <span class="hint">(optional)</span></label><input id="year" name="Year" type="text" inputmode="numeric" maxlength="20"></div>
+<div><label for="mileage">Approximate mileage <span class="hint">(optional)</span></label><input id="mileage" name="Approximate mileage" type="text" maxlength="40"></div>
+<div><label for="visitDate">Appointment date and time <span class="hint">(optional)</span></label><input id="visitDate" name="Appointment date and time" type="text" maxlength="80" placeholder="For example: Tuesday, 10:30 a.m."></div>
+</div></fieldset>
+<fieldset><legend>What you noticed</legend><div class="grid">
+<div class="full"><label for="symptom">Describe the symptom in your own words</label><textarea id="symptom" name="Symptom description" maxlength="2000" placeholder="What did you observe? Stick to what you noticed; no need to guess at a cause."></textarea></div>
+<div><label for="started">When did it start?</label><textarea id="started" name="When it started" maxlength="1000" placeholder="Approximate date or circumstances, if known."></textarea></div>
+<div><label for="frequency">How often / when does it happen?</label><textarea id="frequency" name="Frequency and timing" maxlength="1000" placeholder="For example, how often and under what conditions you have observed it."></textarea></div>
+<div class="full"><span class="label"><strong>Warning indicators you observed</strong> <span class="hint">Check any that apply; this is not a diagnostic checklist.</span></span>
+<div class="checklist" style="margin-top:8px">
+<label class="check"><input type="checkbox" name="Warning indicators" value="Dashboard warning light or message">Dashboard warning light or message</label>
+<label class="check"><input type="checkbox" name="Warning indicators" value="Unusual sound">Unusual sound</label>
+<label class="check"><input type="checkbox" name="Warning indicators" value="Unusual smell">Unusual smell</label>
+<label class="check"><input type="checkbox" name="Warning indicators" value="Visible fluid or other change">Visible fluid or other change</label>
+<label class="check"><input type="checkbox" name="Warning indicators" value="Change in how it feels or operates">Change in how it feels or operates</label>
+<label class="check"><input type="checkbox" name="Warning indicators" value="None noticed">None noticed</label>
+</div><label for="indicatorNotes" style="margin-top:12px">Details, including any message shown <span class="hint">(optional)</span></label><textarea id="indicatorNotes" name="Warning indicator details" maxlength="1000" placeholder="Copy wording you observed, if useful."></textarea></div>
+</div></fieldset>
+<fieldset><legend>What you have tried</legend><label for="tried">Steps already tried, and what you observed afterward</label><textarea id="tried" name="Steps already tried" maxlength="1500" placeholder="Optional. Record only what you did and noticed; this worksheet does not suggest steps to try."></textarea></fieldset>
+<fieldset><legend>Questions for the technician</legend><label for="questions">Write down anything you want to ask</label><textarea id="questions" name="Questions for technician" maxlength="1500" placeholder="Example: What information would help you assess the concern?"></textarea></fieldset>
+<fieldset><legend>Appointment logistics</legend><div class="grid">
+<div><label for="contact">Shop or technician contact / location <span class="hint">(optional)</span></label><input id="contact" name="Shop or technician contact or location" type="text" maxlength="160"></div>
+<div><label for="transport">Transport or pickup plan <span class="hint">(optional)</span></label><input id="transport" name="Transport or pickup plan" type="text" maxlength="240"></div>
+<div class="full"><label for="logistics">Other logistics or notes <span class="hint">(optional)</span></label><textarea id="logistics" name="Other logistics or notes" maxlength="1000" placeholder="For example, items to bring or a scheduling detail."></textarea></div>
+</div></fieldset>
+</form>
+<p class="actions-note">Empty-state guidance: start with the symptom you noticed, when it happens, and any questions you want answered. Leave unknown or irrelevant fields blank. Export creates a local text file from the notes currently in this tab; print opens your browser's print dialog.</p>
+<details class="example no-print"><summary>Optional fictional example — view sample wording</summary><p>This fictional example shows the level of detail you might record. It is not a real customer account or diagnostic guidance.</p><pre>Vehicle: Sample compact car, 2018
+Symptom: A brief rattle was heard once after starting.
+Timing: Noticed this morning; not sure whether it has happened before.
+Indicator: No dashboard message noticed.
+Question: What details would be useful for your assessment?</pre></details>
+<footer>Experimental worksheet, not a validated solution. Screening evidence is partial and low-confidence; it does not establish purchase intent, task completion, or demand. No diagnostic guidance is provided.</footer>
+</main>
+<script>
+(function(){
+const form=document.getElementById('worksheet'), status=document.getElementById('status');
+function clean(value){return (value||'').replace(/\r\n?/g,'\n').trim();}
+function collectedText(){
+ const lines=['VEHICLE SERVICE VISIT PREP CARD',''];
+ const fields=[['Vehicle details',['Make and model','Year','Approximate mileage','Appointment date and time']],['What you noticed',['Symptom description','When it started','Frequency and timing']],['Warning indicators',['Warning indicators','Warning indicator details']],['What you have tried',['Steps already tried']],['Questions for the technician',['Questions for technician']],['Appointment logistics',['Shop or technician contact or location','Transport or pickup plan','Other logistics or notes']]];
+ for(const section of fields){lines.push(section[0]);for(const name of section[1]){const entries=Array.from(form.elements).filter(el=>el.name===name);let value='';if(entries.length>1&&entries.some(el=>el.type==='checkbox')){value=entries.filter(el=>el.checked).map(el=>el.value).join(', ');}else if(entries[0])value=clean(entries[0].value);lines.push(name+': '+(value||'(not provided)'));}lines.push('');}
+ lines.push('Note: These are personal observations and questions, not a diagnosis. A technician must assess the vehicle.');
+ return lines.join('\n');
+}
+document.getElementById('exportBtn').addEventListener('click',function(){
+ const blob=new Blob([collectedText()],{type:'text/plain;charset=utf-8'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='vehicle-service-visit-notes.txt';document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(url);},1000);status.textContent='Plain-text notes downloaded.';
+});
+document.getElementById('printBtn').addEventListener('click',function(){status.textContent='Print dialog opened.';window.print();});
+document.getElementById('resetBtn').addEventListener('click',function(){if(window.confirm('Clear all worksheet entries? This cannot be undone.')){form.reset();status.textContent='Worksheet cleared.';}else{status.textContent='Entries kept.';}});
+})();
+</script>
+</body>
+</html>
